@@ -10,6 +10,16 @@
       background: transparent;
       border: 0;
       padding: 0;
+
+      input {
+        font-family: inherit;
+      }
+
+      textarea {
+        font-family: inherit;
+        height: 4em;
+        width: 100%;
+      }
     }
   }
 }
