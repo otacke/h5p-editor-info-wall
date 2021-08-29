@@ -70,12 +70,11 @@ export default class InfoWall {
 
     this.panelsList = this.findField('panels', this.fieldInstance);
     this.panelsList.on('addedItem', event => {
-      const entries = this.findField('entries', event.data);
-      for (let i = 0; i < this.propertyFields.length - 1; i++) {
-        entries.addItem();
-      }
+      this.fillUpEntries(event.data);
+    });
 
-      this.updateLabels();
+    this.panelsList.forEachChild(panel => {
+      this.fillUpEntries(panel);
     });
 
     this.propertiesList.forEachChild(child => {
@@ -84,6 +83,22 @@ export default class InfoWall {
     });
 
     // Initial update
+    this.updateLabels();
+  }
+
+  /**
+   * Fill up entries.
+   * @param {H5P.List} panel Panel.
+   */
+  fillUpEntries(panel) {
+    const entries = this.findField('entries', panel);
+
+    // 1 element is set by H5P List, so for new panel, we set 1 not 0
+    const entriesPresent = (entries.getValue() || ['']).length;
+    for (let i = entriesPresent; i < this.propertyFields.length; i++) {
+      entries.addItem();
+    }
+
     this.updateLabels();
   }
 
