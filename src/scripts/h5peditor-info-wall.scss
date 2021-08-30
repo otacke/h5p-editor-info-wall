@@ -11,14 +11,16 @@
       border: 0;
       padding: 0;
 
-      input {
-        font-family: inherit;
+      .field-name-panelTitle {
+        display: none;
       }
 
-      .h5peditor-info-wall-passive-list .field-name-value textarea {
+      .field:nth-child(2) {
+        margin-top: 0;
+      };
+
+      input {
         font-family: inherit;
-        height: 4em;
-        width: 100%;
       }
     }
   }

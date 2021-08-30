@@ -1,5 +1,7 @@
 import './h5peditor-info-wall.scss';
 
+import Util from './h5peditor-info-wall-util';
+
 /** Class for InfoWallPropertiesList widget */
 export default class InfoWall {
 
@@ -39,6 +41,9 @@ export default class InfoWall {
     });
   }
 
+  /**
+   * Initialize.
+   */
   initialize() {
     this.propertiesList = this.findField('propertiesGroup/properties', this.fieldInstance);
     this.propertyFields = this.getPropertyFields();
@@ -71,10 +76,12 @@ export default class InfoWall {
     this.panelsList = this.findField('panels', this.fieldInstance);
     this.panelsList.on('addedItem', event => {
       this.fillUpEntries(event.data);
+      this.addPanelTitleListeners(event.data);
     });
 
     this.panelsList.forEachChild(panel => {
       this.fillUpEntries(panel);
+      this.addPanelTitleListeners(panel);
     });
 
     this.propertiesList.forEachChild(child => {
@@ -84,6 +91,91 @@ export default class InfoWall {
 
     // Initial update
     this.updateLabels();
+  }
+
+  /**
+   * Add panel listeners to trigger panel title update.
+   * @param {H5P.List} panel Panel.
+   */
+  addPanelTitleListeners(panel) {
+    const image = this.findField('image', panel);
+
+    // Wait for metadata form to be appended
+    Util.waitForChild(image, 'metadataForm', () => {
+      // Listen for metadataform title changes
+      image.metadataForm.children
+        .filter(child => child?.field?.name === 'title')
+        .shift()
+        .$input.get(0)
+        .addEventListener('change', () => {
+          this.setPanelTitle(panel);
+        });
+
+      // Listen for alt tag changes
+      const altTagField = this.findField('alt', image);
+      altTagField.$input.on('change', () => {
+        this.setPanelTitle(panel);
+      });
+
+      // Initial title check
+      this.setPanelTitle(panel);
+    });
+
+    // Listen for entry changes
+    const entries = this.findField('entries', panel);
+    entries.forEachChild(entry => {
+      entry.$input.on('change', () => {
+        this.setPanelTitle(panel);
+      });
+    });
+  }
+
+  /**
+   * Set panel title. Hidden field that will be checked by vertical tabs widget.
+   * @param {H5P.List} panel Panel.
+   */
+  setPanelTitle(panel) {
+    const titleField = this.findField('panelTitle', panel);
+    titleField.$input.val(this.determineBestPanelTitle(panel));
+    titleField.$input.change();
+  }
+
+  /**
+   * Determine best title for panel.
+   * @param {object} panel Panel element.
+   * @return {string} Best title for panel.
+   */
+  determineBestPanelTitle(panel) {
+    const image = this.findField('image', panel);
+
+    // Preferred title: metadata title of image
+    let text = image.metadataForm.children.filter(child => child?.field?.name === 'title').shift().value;
+    if (text && text !== H5PEditor.t('core', 'untitled').replace(':libraryTitle', 'Image')) {
+      return text;
+    }
+
+    // Next best title: alt description of image
+    text = image.$libraryWrapper.get(0).querySelector('.field-name-alt input').value;
+    if (text && text !== '') {
+      return text;
+    }
+
+    // Next best title: first filled field
+    const entries = this.findField('entries', panel);
+    entries.forEachChild(child => {
+      if (text) {
+        return;
+      }
+      text = Util.htmlDecode(child.value || '');
+    });
+
+    if (text && text !== '') {
+      return text;
+    }
+
+    // Fallback for untitled panel
+    return H5PEditor.t('core', 'untitled')
+      .replace(':libraryTitle', H5PEditor.t('H5PEditor.InfoWall', 'panel'));
   }
 
   /**
