@@ -1,2 +1,2 @@
-H5P Editor Information Wall Properties List
+H5P Editor Information Wall
 ==========
