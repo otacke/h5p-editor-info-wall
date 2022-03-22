@@ -113,10 +113,8 @@ export default class InfoWall {
 
       // Listen for alt tag changes
       const altTagField = this.findField('alt', image);
-      if (altTagField) {
-        altTagField.$input.on('change', () => {
-          this.setPanelTitle(panel);
-        });
+      if (typeof altTagField.change === 'function') {
+        altTagField.change(() => this.setPanelTitle(panel));
       }
 
       // Initial title check
