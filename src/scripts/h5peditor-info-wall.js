@@ -226,7 +226,7 @@ export default class InfoWall {
     this.panelsList.forEachChild(child => {
       const entries = this.findField('entries', child);
       entries.moveItem(newOrder.from, newOrder.to);
-      entries.widget.updateDOM();
+      entries.widget.updateOrder();
     });
   }
 
@@ -289,7 +289,7 @@ export default class InfoWall {
         index++;
       });
 
-      entries.widget.updateDOM();
+      entries.widget.updateLabels();
     });
   }
 
