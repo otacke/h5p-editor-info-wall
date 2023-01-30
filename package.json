@@ -1,12 +1,12 @@
 {
   "name": "h5p-editor-info-wall",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "description": "Editor for InfoWall",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cross-env NODE_ENV=production webpack",
-    "watch": "webpack --watch"
+    "watch": "cross-env NODE_ENV=development webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -19,19 +19,19 @@
   "author": "Oliver Tacke",
   "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "^7.16.8",
-    "@babel/core": "^7.16.10",
-    "@babel/plugin-transform-destructuring": "^7.16.7",
-    "@babel/preset-env": "^7.16.10",
-    "babel-loader": "^8.2.3",
+    "@babel/cli": "^7.18.9",
+    "@babel/core": "^7.18.9",
+    "@babel/plugin-transform-destructuring": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
+    "babel-loader": "^8.2.5",
     "cross-env": "^7.0.3",
-    "css-loader": "^6.5.1",
-    "eslint": "^8.7.0",
-    "mini-css-extract-plugin": "^2.5.2",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.20.0",
+    "mini-css-extract-plugin": "^2.6.1",
     "regenerator-runtime": "^0.13.9",
-    "sass": "^1.49.0",
-    "sass-loader": "^12.4.0",
-    "webpack": "^5.66.0",
-    "webpack-cli": "^4.9.1"
+    "sass": "^1.54.0",
+    "sass-loader": "^13.0.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   }
 }
