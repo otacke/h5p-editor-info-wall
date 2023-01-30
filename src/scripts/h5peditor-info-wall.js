@@ -196,7 +196,7 @@ export default class InfoWall {
 
   /**
    * Determine whether propertyOrder has changed.
-   * @return {number[]} New order.
+   * @return {object} Info where property was moved from and where to.
    */
   updatePropertyOrder() {
     const currentPropertyFields = this.getPropertyFields();
@@ -222,11 +222,17 @@ export default class InfoWall {
     }, {});
   }
 
+  /**
+   * Update the order of entries in the list.
+   * @param {object} newOrder Info about changed positions.
+   * @param {number} newOrder.from Position index of field that was moved.
+   * @param {number} newOrder.to Position index that field should go to.
+   */
   updateEntriesOrder(newOrder) {
     this.panelsList.forEachChild(child => {
       const entries = this.findField('entries', child);
       entries.moveItem(newOrder.from, newOrder.to);
-      entries.widget.updateDOM();
+      entries.widget.updateOrder();
     });
   }
 
@@ -242,6 +248,10 @@ export default class InfoWall {
     return propertyFields;
   }
 
+  /**
+   * Handle added property in list.
+   * @param {object} property Added property.
+   */
   handlePropertyAdded(property) {
     clearTimeout(this.mouseUpTimeout);
 
@@ -259,6 +269,10 @@ export default class InfoWall {
     this.propertyFields = this.getPropertyFields();
   }
 
+  /**
+   * Handle removed property in list.
+   * @param {number} index Index of property in list.
+   */
   handlePropertyRemoved(index) {
     clearTimeout(this.mouseUpTimeout);
 
@@ -271,7 +285,7 @@ export default class InfoWall {
   }
 
   /**
-   * Update the labels
+   * Update labels.
    */
   updateLabels() {
     const labels = [];
@@ -289,7 +303,7 @@ export default class InfoWall {
         index++;
       });
 
-      entries.widget.updateDOM();
+      entries.widget.updateLabels();
     });
   }
 
