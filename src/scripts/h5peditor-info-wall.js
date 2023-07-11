@@ -6,7 +6,7 @@ import Util from './h5peditor-info-wall-util';
 export default class InfoWall {
 
   /**
-   * @constructor
+   * @class
    * @param {object} parent Parent element in semantics.
    * @param {object} field Semantics field properties.
    * @param {object} params Parameters entered in editor form.
@@ -48,10 +48,10 @@ export default class InfoWall {
     this.propertiesList = this.findField('propertiesGroup/properties', this.fieldInstance);
     this.propertyFields = this.getPropertyFields();
 
-    this.propertiesList.on('addedItem', event => {
+    this.propertiesList.on('addedItem', (event) => {
       this.handlePropertyAdded(event.data);
     });
-    this.propertiesList.on('removedItem', event => {
+    this.propertiesList.on('removedItem', (event) => {
       this.handlePropertyRemoved(event.data);
     });
     /*
@@ -74,17 +74,17 @@ export default class InfoWall {
     });
 
     this.panelsList = this.findField('panels', this.fieldInstance);
-    this.panelsList.on('addedItem', event => {
+    this.panelsList.on('addedItem', (event) => {
       this.fillUpEntries(event.data);
       this.addPanelTitleListeners(event.data);
     });
 
-    this.panelsList.forEachChild(panel => {
+    this.panelsList.forEachChild((panel) => {
       this.fillUpEntries(panel);
       this.addPanelTitleListeners(panel);
     });
 
-    this.propertiesList.forEachChild(child => {
+    this.propertiesList.forEachChild((child) => {
       const labelField = this.findField('label', child);
       labelField.change(() => this.updateLabels());
     });
@@ -104,7 +104,7 @@ export default class InfoWall {
     Util.waitForChild(image, 'metadataForm', () => {
       // Listen for metadataform title changes
       image.metadataForm.children
-        .filter(child => child?.field?.name === 'title')
+        .filter((child) => child?.field?.name === 'title')
         .shift()
         .$input.get(0)
         .addEventListener('change', () => {
@@ -123,7 +123,7 @@ export default class InfoWall {
 
     // Listen for entry changes
     const entries = this.findField('entries', panel);
-    entries.forEachChild(entry => {
+    entries.forEachChild((entry) => {
       entry.$input.on('change', () => {
         this.setPanelTitle(panel);
       });
@@ -143,13 +143,13 @@ export default class InfoWall {
   /**
    * Determine best title for panel.
    * @param {object} panel Panel element.
-   * @return {string} Best title for panel.
+   * @returns {string} Best title for panel.
    */
   determineBestPanelTitle(panel) {
     const image = this.findField('image', panel);
 
     // Preferred title: metadata title of image
-    let text = image.metadataForm.children.filter(child => child?.field?.name === 'title').shift().value;
+    let text = image.metadataForm.children.filter((child) => child?.field?.name === 'title').shift().value;
     if (text && text !== H5PEditor.t('core', 'untitled').replace(':libraryTitle', 'Image')) {
       return text;
     }
@@ -162,7 +162,7 @@ export default class InfoWall {
 
     // Next best title: first filled field
     const entries = this.findField('entries', panel);
-    entries.forEachChild(child => {
+    entries.forEachChild((child) => {
       if (text) {
         return;
       }
@@ -196,11 +196,11 @@ export default class InfoWall {
 
   /**
    * Determine whether propertyOrder has changed.
-   * @return {object} Info where property was moved from and where to.
+   * @returns {object} Info where property was moved from and where to.
    */
   updatePropertyOrder() {
     const currentPropertyFields = this.getPropertyFields();
-    const newOrder = currentPropertyFields.map(field => this.propertyFields.indexOf(field));
+    const newOrder = currentPropertyFields.map((field) => this.propertyFields.indexOf(field));
     this.propertyFields = currentPropertyFields;
 
     // Will always be one rolling move
@@ -229,7 +229,7 @@ export default class InfoWall {
    * @param {number} newOrder.to Position index that field should go to.
    */
   updateEntriesOrder(newOrder) {
-    this.panelsList.forEachChild(child => {
+    this.panelsList.forEachChild((child) => {
       const entries = this.findField('entries', child);
       entries.moveItem(newOrder.from, newOrder.to);
       entries.widget.updateOrder();
@@ -238,11 +238,11 @@ export default class InfoWall {
 
   /**
    * Get propertyFields.
-   * @return {H5PEditor.Text[]} Editor fields.
+   * @returns {H5PEditor.Text[]} Editor fields.
    */
   getPropertyFields() {
     const propertyFields = [];
-    this.propertiesList.forEachChild(propertyGroup => {
+    this.propertiesList.forEachChild((propertyGroup) => {
       propertyFields.push(this.findField('label', propertyGroup));
     });
     return propertyFields;
@@ -259,7 +259,7 @@ export default class InfoWall {
     const labelField = this.findField('label', property);
     labelField.change(() => this.updateLabels());
 
-    this.panelsList.forEachChild(child => {
+    this.panelsList.forEachChild((child) => {
       const entries = this.findField('entries', child);
       entries.addItem();
     });
@@ -276,7 +276,7 @@ export default class InfoWall {
   handlePropertyRemoved(index) {
     clearTimeout(this.mouseUpTimeout);
 
-    this.panelsList.forEachChild(child => {
+    this.panelsList.forEachChild((child) => {
       const entries = this.findField('entries', child);
       entries.removeItem(index);
     });
@@ -290,15 +290,15 @@ export default class InfoWall {
   updateLabels() {
     const labels = [];
 
-    this.propertiesList.forEachChild(child => {
+    this.propertiesList.forEachChild((child) => {
       labels.push(this.findField('label', child).value);
     });
 
-    this.panelsList.forEachChild(child => {
+    this.panelsList.forEachChild((child) => {
       let index = 0;
 
       const entries = this.findField('entries', child);
-      entries.forEachChild(entry => {
+      entries.forEachChild((entry) => {
         entry.infoWallLabel = labels[index];
         index++;
       });
@@ -317,7 +317,7 @@ export default class InfoWall {
 
   /**
    * Validate current values. Invoked by H5P core.
-   * @return {boolean} True, if current value is valid, else false.
+   * @returns {boolean} True, if current value is valid, else false.
    */
   validate() {
     return this.fieldInstance.validate();
