@@ -1,6 +1,6 @@
 import './h5peditor-info-wall.scss';
 
-import Util from './h5peditor-info-wall-util';
+import Util from './h5peditor-info-wall-util.js';
 
 /** Class for InfoWallPropertiesList widget */
 export default class InfoWall {
