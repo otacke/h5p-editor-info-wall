@@ -1,6 +1,6 @@
 {
   "name": "h5p-editor-info-wall",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Editor for InfoWall",
   "private": true,
   "scripts": {
