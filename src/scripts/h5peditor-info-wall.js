@@ -26,7 +26,7 @@ export default class InfoWall {
 
     // DOM
     this.$container = H5P.jQuery('<div>', {
-      class: 'h5peditor-info-wall'
+      class: 'h5peditor-info-wall',
     });
 
     // Instantiate original field (or create your own and call setValue)
